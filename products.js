@@ -53,6 +53,7 @@ async function list(options = {}) {
     .slice(offset, offset + limit) // Slice the products
 }
 
+
 /**
  * Get a single product
  * @param {string} id
@@ -70,6 +71,10 @@ async function get(id) {
 
   // If no product is found, return null
   return null;
+}
+async function create (fields) {
+  const product = await new Product(fields).save()
+  return product
 }
 
 module.exports = {
