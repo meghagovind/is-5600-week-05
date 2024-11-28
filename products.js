@@ -6,6 +6,7 @@ const db = require('./db')
 
 const productsFile = path.join(__dirname, 'data/full-products.json')
 
+// Define our Product Model
 const Product = db.model('Product', {
   _id: { type: String, default: cuid },
   description: { type: String },
@@ -72,12 +73,29 @@ async function get(id) {
   // If no product is found, return null
   return null;
 }
+
 async function create (fields) {
   const product = await new Product(fields).save()
   return product
 }
 
+async function edit(_id, change) {
+  const product = await get(_id)
+  Object.keys(change).forEach((key) => {
+    product[key] = change[key]
+  })
+  await product.save()
+  return product
+}
+
+async function destroy(_id) {
+  return await Product.deleteOne({ _id })
+}
+
 module.exports = {
   list,
-  get
+  get,
+  create,
+  edit,
+  destroy
 }
